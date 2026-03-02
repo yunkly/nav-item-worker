@@ -1,0 +1,32 @@
+name = "nav-item-worker"
+main = "worker/index.js"
+compatibility_date = "2025-02-10"
+
+# 可选：启用 Node.js 兼容特性（本 Worker 代码不依赖原生 Node API，但开启无妨）
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# 与原项目 authMiddleware / auth.js 的密钥保持一致，便于平滑迁移
+JWT_SECRET = "your_jwt_secret_key"
+
+# 如果你使用 R2 存储上传文件，这里配置对外可访问的前缀（可用自定义域或 R2 公网域名）
+# 例如：UPLOAD_PUBLIC_URL = "https://static.example.com/uploads/"
+UPLOAD_PUBLIC_URL = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nav-item"
+database_id = "xx-xx-xx-xx-xx"
+# 本地开发可用占位 UUID；远程/部署必须为 Cloudflare 上创建的真实 database_id
+migrations_dir = "migrations"
+
+# 部署时同时托管前端静态资源（需先执行 npm run build:web 生成 web/dist）
+[assets]
+directory = "web/dist"
+binding = "ASSETS"
+
+# 如需 Logo 上传：先执行 npx wrangler r2 bucket create nav-item-uploads，再取消下面三行注释
+# [[r2_buckets]]
+# binding = "UPLOAD_BUCKET"
+# bucket_name = "nav-item-uploads"
+
